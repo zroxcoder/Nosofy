@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard | Nosofy</title>
+<link rel="icon" href="../assets/N.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="../styles/dashboard.css">
+
+</head>
+<body>
+
+ <div id="sidebar">
+        <h3>NOSOFY</h3>
+        <a class="nav-link active" href="dashboard.html">🏠 Dashboard</a>
+        <a class="nav-link" href="notes.html">📝 Notes</a>
+        <a class="nav-link" href="planner.html">📅 Planner</a>
+        <a class="nav-link" href="projects.html">🗂️ Projects</a>
+        <a class="nav-link" href="courses.html">📒 Courses</a>
+        <a class="nav-link" href="expenses.html">💰 Expenses</a>
+        <a class="nav-link" href="passwords.html">🔐 Vault</a>
+        <a class="nav-link" href="cloudhub.html">☁️ Cloud Hub</a>
+        <a class="nav-link" href="chatbot.html">👾 Chat Bot</a>
+        <a class="nav-link" href="profile.html">⚙️ Profile</a>
+    </div>
+    
+<div class="content">
+    <h2 id="greetText">Loading...</h2>
+
+    <!-- Quick Stats Section -->
+    <div class="dashboard-section">
+        <h4><i class="bi bi-graph-up"></i> Quick Stats</h4>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <i class="bi bi-journal-text"></i>
+                <div class="stat-value" id="totalNotes">0</div>
+                <div class="stat-label">Total Notes</div>
+            </div>
+            <div class="stat-box">
+                <i class="bi bi-check-circle"></i>
+                <div class="stat-value" id="totalTasks">0</div>
+                <div class="stat-label">Active Tasks</div>
+            </div>
+            <div class="stat-box">
+                <i class="bi bi-folder"></i>
+                <div class="stat-value" id="totalProjects">0</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-box">
+                <i class="bi bi-book"></i>
+                <div class="stat-value" id="totalCourses">0</div>
+                <div class="stat-label">Courses</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="dashboard-section">
+        <h4><i class="bi bi-lightning-charge"></i> Quick Actions</h4>
+        <div class="dashboard-card">
+            <div class="quick-actions">
+                <a href="notes.html" class="quick-btn"><i class="bi bi-plus-circle"></i> New Note</a>
+                <a href="planner.html" class="quick-btn"><i class="bi bi-calendar-plus"></i> Add Task</a>
+                <a href="projects.html" class="quick-btn"><i class="bi bi-folder-plus"></i> New Project</a>
+                <a href="courses.html" class="quick-btn"><i class="bi bi-book"></i> Browse Courses</a>
+                <a href="aichatbot.html" class="quick-btn"><i class="bi bi-robot"></i> Ask CHATBOT</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Study Timer -->
+    <div class="dashboard-section">
+        <h4><i class="bi bi-clock-history"></i> Custom Study Timer</h4>
+        <div class="dashboard-card">
+            <div class="timer-container">
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                <div class="timer-controls">
+                    <button class="timer-btn" id="startTimer"><i class="bi bi-play-fill"></i> Start</button>
+                    <button class="timer-btn" id="pauseTimer"><i class="bi bi-pause-fill"></i> Pause</button>
+                    <button class="timer-btn stop" id="resetTimer"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+                </div>
+                
+                <div class="timer-settings">
+                    <div class="timer-setting">
+                        <label><i class="bi bi-book"></i> Work Duration (min)</label>
+                        <input type="number" id="workDuration" value="25" min="1" max="180">
+                        <button onclick="applyWorkDuration()">Apply</button>
+                    </div>
+                    <div class="timer-setting">
+                        <label><i class="bi bi-cup-hot"></i> Short Break (min)</label>
+                        <input type="number" id="shortBreakDuration" value="5" min="1" max="60">
+                        <button onclick="applyShortBreak()">Apply</button>
+                    </div>
+                    <div class="timer-setting">
+                        <label><i class="bi bi-cup"></i> Long Break (min)</label>
+                        <input type="number" id="longBreakDuration" value="15" min="1" max="60">
+                        <button onclick="applyLongBreak()">Apply</button>
+                    </div>
+                </div>
+
+                <div class="timer-stats">
+                    <div class="timer-stat">
+                        <div class="timer-stat-value" id="sessionsToday">0</div>
+                        <div class="timer-stat-label">Sessions Today</div>
+                    </div>
+                    <div class="timer-stat">
+                        <div class="timer-stat-value" id="totalMinutesToday">0</div>
+                        <div class="timer-stat-label">Minutes Today</div>
+                    </div>
+                    <div class="timer-stat">
+                        <div class="timer-stat-value" id="totalSessions">0</div>
+                        <div class="timer-stat-label">Total Sessions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productivity Metrics (Replaces Recent Activity) -->
+    <div class="dashboard-section">
+        <h4><i class="bi bi-graph-up-arrow"></i> Productivity Metrics</h4>
+        <div class="dashboard-card">
+            <div class="productivity-grid">
+                <div class="productivity-metric">
+                    <i class="bi bi-fire"></i>
+                    <div class="metric-value" id="dailyProductivityScore">0</div>
+                    <div class="metric-label">Productivity Score</div>
+                    <div class="metric-sublabel">Out of 100</div>
+                </div>
+                <div class="productivity-metric">
+                    <i class="bi bi-check2-all"></i>
+                    <div class="metric-value" id="tasksCompletedToday">0</div>
+                    <div class="metric-label">Tasks Completed</div>
+                    <div class="metric-sublabel">Today</div>
+                </div>
+                <div class="productivity-metric">
+                    <i class="bi bi-hourglass-split"></i>
+                    <div class="metric-value" id="focusHoursToday">0h</div>
+                    <div class="metric-label">Focus Time</div>
+                    <div class="metric-sublabel">Today</div>
+                </div>
+                <div class="productivity-metric">
+                    <i class="bi bi-trophy"></i>
+                    <div class="metric-value" id="weeklyAvgScore">0</div>
+                    <div class="metric-label">Weekly Average</div>
+                    <div class="metric-sublabel">Last 7 days</div>
+                </div>
+            </div>
+
+            <div class="streak-display">
+                <div class="streak-emoji">🔥</div>
+                <div class="streak-number" id="productivityStreak">0</div>
+                <div class="streak-label">Day Productivity Streak!</div>
+            </div>
+
+            <div class="goal-progress">
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <span class="goal-title"><i class="bi bi-target"></i> Daily Goal Progress</span>
+                        <span class="goal-percentage" id="dailyGoalPercent">0%</span>
+                    </div>
+                    <div class="goal-bar-bg">
+                        <div class="goal-bar-fill" id="dailyGoalBar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <span class="goal-title"><i class="bi bi-calendar-week"></i> Weekly Goal Progress</span>
+                        <span class="goal-percentage" id="weeklyGoalPercent">0%</span>
+                    </div>
+                    <div class="goal-bar-bg">
+                        <div class="goal-bar-fill" id="weeklyGoalBar" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Focus & Weekly Summary Grid -->
+    <div class="grid-2-col">
+        <!-- Today's Focus -->
+        <div class="dashboard-section">
+            <h4><i class="bi bi-bullseye"></i> Today's Focus</h4>
+            <div class="dashboard-card">
+                <div style="margin-bottom:15px;">
+                    <input type="text" id="newFocusInput" placeholder="Add a focus goal for today..." 
+                           style="width:100%;padding:10px;border:2px solid var(--primary-orange);border-radius:8px;font-size:14px;outline:none;">
+                </div>
+                <div id="focusList" style="min-height:100px;">
+                    <p style="text-align:center;color:#666;padding:20px;">No focus goals yet. Add one above!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Summary -->
+        <div class="dashboard-section">
+            <h4><i class="bi bi-calendar-week"></i> Weekly Summary</h4>
+            <div class="dashboard-card">
+                <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
+                    <div style="text-align:center;padding:15px;">
+                        <i class="bi bi-journal-plus" style="font-size:28px;color:var(--primary-orange);"></i>
+                        <div style="font-size:24px;font-weight:700;margin-top:8px;" id="weekNotes">0</div>
+                        <div style="font-size:12px;color:#666;margin-top:3px;">Notes This Week</div>
+                    </div>
+                    <div style="text-align:center;padding:15px;">
+                        <i class="bi bi-check-all" style="font-size:28px;color:var(--primary-orange);"></i>
+                        <div style="font-size:24px;font-weight:700;margin-top:8px;" id="weekTasks">0</div>
+                        <div style="font-size:12px;color:#666;margin-top:3px;">Tasks Completed</div>
+                    </div>
+                    <div style="text-align:center;padding:15px;">
+                        <i class="bi bi-clock-history" style="font-size:28px;color:var(--primary-orange);"></i>
+                        <div style="font-size:24px;font-weight:700;margin-top:8px;" id="weekSessions">0</div>
+                        <div style="font-size:12px;color:#666;margin-top:3px;">Study Sessions</div>
+                    </div>
+                    <div style="text-align:center;padding:15px;">
+                        <i class="bi bi-star" style="font-size:28px;color:var(--primary-orange);"></i>
+                        <div style="font-size:24px;font-weight:700;margin-top:8px;" id="weekActive">0</div>
+                        <div style="font-size:12px;color:#666;margin-top:3px;">Active Days</div>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:15px;padding-top:15px;border-top:2px solid #fff;font-size:13px;color:#666;">
+                    <i class="bi bi-trophy"></i> Keep up the great work!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Quote -->
+    <div class="dashboard-section">
+        <h4><i class="bi bi-stars"></i> Daily Quote</h4>
+        <div class="dashboard-card">
+            <span id="quote">Loading...</span><br>
+            <small id="author"></small>
+        </div>
+    </div>
+
+    <!-- Useful Websites & Upcoming Deadlines Grid -->
+    <div class="grid-2-col">
+        <div class="dashboard-section">
+            <h4><i class="bi bi-newspaper"></i> Useful Websites</h4>
+            <div class="dashboard-card" id="newscontainer">Loading...</div>
+        </div>
+
+        <div class="dashboard-section">
+            <h4><i class="bi bi-bell"></i> Upcoming Deadlines</h4>
+            <div class="dashboard-card" id="notifications">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Mini Calendar -->
+    <div class="dashboard-section">
+        <h4><i class="bi bi-calendar3"></i> This Week</h4>
+        <div class="dashboard-card">
+            <div class="calendar-mini" id="miniCalendar"></div>
+        </div>
+    </div>
+</div>
+<script src="../script/dashboard.js"></script>
+</body>
+</html>
