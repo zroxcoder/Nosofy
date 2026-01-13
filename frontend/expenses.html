@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Expense Tracker | Nosofy</title>
+
+<link rel="icon" href="../assets/N.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="../styles/expenses.css">
+
+</head>
+<body>
+
+<div id="sidebar">
+        <h3>NOSOFY</h3>
+        <a class="nav-link" href="dashboard.html">🏠 Dashboard</a>
+        <a class="nav-link" href="notes.html">📝 Notes</a>
+        <a class="nav-link" href="planner.html">📅 Planner</a>
+        <a class="nav-link" href="projects.html">🗂️ Projects</a>
+        <a class="nav-link" href="courses.html">📒 Courses</a>
+        <a class="nav-link active" href="expenses.html">💰 Expenses</a>
+        <a class="nav-link" href="passwords.html">🔐 Vault</a>
+        <a class="nav-link" href="cloudhub.html">☁️ Cloud Hub</a>
+        <a class="nav-link" href="chatbot.html">👾 Chat Bot</a>
+        <a class="nav-link" href="profile.html">⚙️ Profile</a>
+</div>
+
+<div class="content">
+<h2 class="section-title">💰 Expense Tracker</h2>
+
+<!-- Currency Selector -->
+<div style="margin-bottom:20px;">
+<label style="font-weight:600;margin-right:10px;">Currency:</label>
+<select id="currencySelect" onchange="saveCurrency()" style="padding:8px;border-radius:6px;border:1px solid #aaa;font-weight:600;">
+    <option value="USD">🇺🇸 USD - US Dollar ($)</option>
+    <option value="EUR">🇪🇺 EUR - Euro (€)</option>
+    <option value="GBP">🇬🇧 GBP - British Pound (£)</option>
+    <option value="INR">🇮🇳 INR - Indian Rupee (₹)</option>
+    <option value="JPY">🇯🇵 JPY - Japanese Yen (¥)</option>
+    <option value="CNY">🇨🇳 CNY - Chinese Yuan (¥)</option>
+    <option value="AUD">🇦🇺 AUD - Australian Dollar (A$)</option>
+    <option value="CAD">🇨🇦 CAD - Canadian Dollar (C$)</option>
+    <option value="CHF">🇨🇭 CHF - Swiss Franc (Fr)</option>
+    <option value="SEK">🇸🇪 SEK - Swedish Krona (kr)</option>
+    <option value="NZD">🇳🇿 NZD - New Zealand Dollar (NZ$)</option>
+    <option value="SGD">🇸🇬 SGD - Singapore Dollar (S$)</option>
+    <option value="HKD">🇭🇰 HKD - Hong Kong Dollar (HK$)</option>
+    <option value="NOK">🇳🇴 NOK - Norwegian Krone (kr)</option>
+    <option value="KRW">🇰🇷 KRW - South Korean Won (₩)</option>
+    <option value="TRY">🇹🇷 TRY - Turkish Lira (₺)</option>
+    <option value="RUB">🇷🇺 RUB - Russian Ruble (₽)</option>
+    <option value="BRL">🇧🇷 BRL - Brazilian Real (R$)</option>
+    <option value="ZAR">🇿🇦 ZAR - South African Rand (R)</option>
+    <option value="MXN">🇲🇽 MXN - Mexican Peso ($)</option>
+    <option value="AED">🇦🇪 AED - UAE Dirham (د.إ)</option>
+    <option value="SAR">🇸🇦 SAR - Saudi Riyal (﷼)</option>
+    <option value="THB">🇹🇭 THB - Thai Baht (฿)</option>
+    <option value="IDR">🇮🇩 IDR - Indonesian Rupiah (Rp)</option>
+    <option value="MYR">🇲🇾 MYR - Malaysian Ringgit (RM)</option>
+    <option value="PHP">🇵🇭 PHP - Philippine Peso (₱)</option>
+    <option value="PKR">🇵🇰 PKR - Pakistani Rupee (₨)</option>
+    <option value="BDT">🇧🇩 BDT - Bangladeshi Taka (৳)</option>
+    <option value="VND">🇻🇳 VND - Vietnamese Dong (₫)</option>
+    <option value="EGP">🇪🇬 EGP - Egyptian Pound (E£)</option>
+    <option value="NGN">🇳🇬 NGN - Nigerian Naira (₦)</option>
+    <option value="ILS">🇮🇱 ILS - Israeli Shekel (₪)</option>
+    <option value="DKK">🇩🇰 DKK - Danish Krone (kr)</option>
+    <option value="PLN">🇵🇱 PLN - Polish Zloty (zł)</option>
+    <option value="CZK">🇨🇿 CZK - Czech Koruna (Kč)</option>
+    <option value="HUF">🇭🇺 HUF - Hungarian Forint (Ft)</option>
+    <option value="CLP">🇨🇱 CLP - Chilean Peso ($)</option>
+    <option value="ARS">🇦🇷 ARS - Argentine Peso ($)</option>
+    <option value="COP">🇨🇴 COP - Colombian Peso ($)</option>
+    <option value="PEN">🇵🇪 PEN - Peruvian Sol (S/.)</option>
+    <option value="NPR">🇳🇵 NPR - Nepalese Rupee (रु)</option>
+</select>
+</div>
+
+<!-- Budget Progress -->
+<div class="budget-progress" id="budgetProgressSection" style="display:none;">
+<h4 style="margin:0 0 10px 0;"><i class="bi bi-piggy-bank"></i> Monthly Budget</h4>
+<div class="budget-bar">
+    <div class="budget-fill" id="budgetFill" style="width:0%"></div>
+</div>
+<p style="margin:10px 0 0 0;font-size:14px;" id="budgetText"></p>
+</div>
+
+<!-- Date Range Tabs -->
+<div class="date-tabs">
+<div class="date-tab active" onclick="setDateRange('all')">All Time</div>
+<div class="date-tab" onclick="setDateRange('today')">Today</div>
+<div class="date-tab" onclick="setDateRange('week')">This Week</div>
+<div class="date-tab" onclick="setDateRange('month')">This Month</div>
+<div class="date-tab" onclick="setDateRange('year')">This Year</div>
+<div class="date-tab" onclick="setDateRange('custom')">Custom Range</div>
+</div>
+
+<div id="customDateRange" style="display:none;margin-bottom:20px;padding:15px;background:#fff;border-radius:8px;">
+<label>From: <input type="date" id="dateFrom" onchange="loadExpenses()"></label>
+<label style="margin-left:15px;">To: <input type="date" id="dateTo" onchange="loadExpenses()"></label>
+</div>
+
+<!-- Statistics Bar -->
+<div class="stats-bar">
+    <div class="stat-box income"><i class="bi bi-arrow-up-circle"></i> Income: <span id="totalIncome">0</span></div>
+    <div class="stat-box expense"><i class="bi bi-arrow-down-circle"></i> Expenses: <span id="totalExpenses">0</span></div>
+    <div class="stat-box balance"><i class="bi bi-wallet2"></i> Balance: <span id="totalBalance">0</span></div>
+    <div class="stat-box"><i class="bi bi-receipt"></i> Transactions: <span id="totalCount">0</span></div>
+    <div class="stat-box"><i class="bi bi-pin-angle-fill"></i> Pinned: <span id="pinnedCount">0</span></div>
+</div>
+
+<div class="top-controls">
+<input type="text" id="searchInput" onkeyup="loadExpenses()" placeholder="🔍 Search transactions...">
+
+<select id="typeFilter" onchange="loadExpenses()">
+<option value="all">All Types</option>
+<option value="income">💰 Income</option>
+<option value="expense">💸 Expense</option>
+</select>
+
+<select id="categoryFilter" onchange="loadExpenses()">
+<option value="all">All Categories</option>
+<option value="Salary">💼 Salary</option>
+<option value="Freelance">💻 Freelance</option>
+<option value="Investment">📈 Investment</option>
+<option value="Gift">🎁 Gift</option>
+<option value="Other Income">💵 Other Income</option>
+<option value="Food">🍔 Food</option>
+<option value="Transport">🚗 Transport</option>
+<option value="Education">📚 Education</option>
+<option value="Shopping">🛍️ Shopping</option>
+<option value="Bills">📄 Bills</option>
+<option value="Entertainment">🎬 Entertainment</option>
+<option value="Health">🏥 Health</option>
+<option value="Travel">✈️ Travel</option>
+<option value="Rent">🏠 Rent</option>
+<option value="Other Expense">💳 Other Expense</option>
+</select>
+
+<select id="sortBy" onchange="loadExpenses()">
+<option value="date-desc">Latest First</option>
+<option value="date-asc">Oldest First</option>
+<option value="amount-desc">Highest Amount</option>
+<option value="amount-asc">Lowest Amount</option>
+<option value="name-asc">Name A-Z</option>
+<option value="name-desc">Name Z-A</option>
+</select>
+
+<select id="viewMode" onchange="toggleViewMode()">
+<option value="grid">📊 Grid View</option>
+<option value="list">📋 List View</option>
+</select>
+
+<button onclick="toggleArchiveView()">
+    <span id="archiveViewText"><i class="bi bi-archive"></i> Show Archived</span>
+</button>
+
+<button onclick="clearAllFilters()"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+</div>
+
+<div class="expense-grid" id="expenseList"></div>
+
+<!-- Category Breakdown -->
+<div id="categoryBreakdown" style="display:none;margin-top:30px;background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+<h3><i class="bi bi-pie-chart"></i> Category Breakdown</h3>
+<div class="category-chart" id="categoryChart"></div>
+</div>
+
+</div>
+
+<button class="add-btn" onclick="openModal()" title="Add Transaction">+</button>
+
+<button class="secondary-btn" id="budgetBtn" onclick="openBudgetModal()" title="Set Budget"><i class="bi bi-piggy-bank"></i></button>
+<button class="secondary-btn" id="exportBtn" onclick="openExportModal()" title="Export/Import"><i class="bi bi-download"></i></button>
+<button class="secondary-btn" id="categoryBtn" onclick="toggleCategoryBreakdown()" title="Category Stats"><i class="bi bi-pie-chart"></i></button>
+
+<!-- Add/Edit Modal -->
+<div id="expenseModal" class="modal">
+<div class="modal-content">
+<h3 id="modalTitle">Add Transaction</h3>
+
+<label><b>Type</b></label>
+<select id="expenseType" onchange="updateCategoryOptions()">
+<option value="expense">💸 Expense</option>
+<option value="income">💰 Income</option>
+</select>
+
+<label><b>Title</b></label>
+<input type="text" id="expenseTitle" placeholder="Transaction title">
+
+<label><b>Amount</b></label>
+<input type="number" id="expenseAmount" placeholder="0.00" step="0.01" min="0">
+
+<label><b>Category</b></label>
+<select id="expenseCategory"></select>
+
+<label><b>Date</b></label>
+<input type="date" id="expenseDate">
+
+<label><b>Payment Method</b></label>
+<select id="paymentMethod">
+<option value="Cash">💵 Cash</option>
+<option value="Credit Card">💳 Credit Card</option>
+<option value="Debit Card">💳 Debit Card</option>
+<option value="UPI">📱 UPI</option>
+<option value="Bank Transfer">🏦 Bank Transfer</option>
+<option value="PayPal">🅿️ PayPal</option>
+<option value="Other">🔄 Other</option>
+</select>
+
+<label><b>Description</b></label>
+<textarea id="expenseDesc" placeholder="Add notes (optional)"></textarea>
+
+<label>
+<input type="checkbox" id="recurringCheck" onchange="toggleRecurring()"> Recurring Transaction
+</label>
+
+<div id="recurringOptions" style="display:none;">
+<label><b>Frequency</b></label>
+<select id="recurringFrequency">
+<option value="daily">Daily</option>
+<option value="weekly">Weekly</option>
+<option value="monthly">Monthly</option>
+<option value="yearly">Yearly</option>
+</select>
+</div>
+
+<button onclick="saveExpense()"><i class="bi bi-save"></i> Save</button>
+<button onclick="closeModal()"><i class="bi bi-x-circle"></i> Cancel</button>
+</div>
+</div>
+
+<!-- Budget Modal -->
+<div id="budgetModal" class="modal">
+<div class="modal-content">
+<h3><i class="bi bi-piggy-bank"></i> Set Monthly Budget</h3>
+<label><b>Budget Amount</b></label>
+<input type="number" id="budgetAmount" placeholder="Enter monthly budget" step="0.01" min="0">
+<p style="font-size:12px;color:#666;margin:5px 0;">Set your monthly expense limit to track spending</p>
+<button onclick="saveBudget()"><i class="bi bi-save"></i> Save Budget</button>
+<button onclick="clearBudget()"><i class="bi bi-trash"></i> Clear Budget</button>
+<button onclick="closeBudgetModal()"><i class="bi bi-x-circle"></i> Cancel</button>
+</div>
+</div>
+
+<!-- Export Modal -->
+<div id="exportModal" class="modal">
+<div class="modal-content">
+<h3>Export / Import Transactions</h3>
+<h4>Export</h4>
+<button onclick="exportExpenses()"><i class="bi bi-download"></i> Export as JSON</button>
+<button onclick="exportExpensesText()"><i class="bi bi-file-text"></i> Export as Text</button>
+<button onclick="exportExpensesCSV()"><i class="bi bi-file-earmark-spreadsheet"></i> Export as CSV</button>
+<h4 style="margin-top:20px;">Import</h4>
+<input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
+<button onclick="importExpenses()"><i class="bi bi-upload"></i> Import from JSON</button>
+<div style="margin-top:15px;">
+    <button onclick="closeExportModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+<script src="../script/expenses.js"></script>
+</body>
+</html>
