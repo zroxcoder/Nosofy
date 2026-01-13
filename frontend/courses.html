@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Courses | Edumate</title>
+
+<link rel="icon" href="../assets/N.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="../styles/courses.css">
+</head>
+<body>
+
+<div id="sidebar">
+        <h3>NOSOFY</h3>
+        <a class="nav-link" href="dashboard.html">🏠 Dashboard</a>
+        <a class="nav-link" href="notes.html">📝 Notes</a>
+        <a class="nav-link" href="planner.html">📅 Planner</a>
+        <a class="nav-link" href="projects.html">🗂️ Projects</a>
+        <a class="nav-link active" href="courses.html">📒 Courses</a>
+        <a class="nav-link" href="expenses.html">💰 Expenses</a>
+        <a class="nav-link" href="passwords.html">🔐 Vault</a>
+        <a class="nav-link" href="cloudhub.html">☁️ Cloud Hub</a>
+        <a class="nav-link" href="chatbot.html">👾 Chat Bot</a>
+        <a class="nav-link" href="profile.html">⚙️ Profile</a>
+</div>
+<div class="content">
+<h2 class="section-title">Your Courses</h2>
+
+<!-- NEW: Statistics Bar -->
+<div class="stats-bar">
+    <div class="stat-box"><i class="bi bi-book"></i> Total: <span id="totalCount">0</span></div>
+    <div class="stat-box"><i class="bi bi-check-circle"></i> Completed: <span id="completedCount">0</span></div>
+    <div class="stat-box"><i class="bi bi-arrow-repeat"></i> Active: <span id="activeCount">0</span></div>
+    <div class="stat-box"><i class="bi bi-pin-angle-fill"></i> Pinned: <span id="pinnedCount">0</span></div>
+    <div class="stat-box"><i class="bi bi-archive-fill"></i> Archived: <span id="archivedCount">0</span></div>
+</div>
+
+<div class="top-controls">
+<input type="text" id="searchInput" onkeyup="loadCourses()" placeholder="🔍 Search courses...">
+
+<select id="priorityFilter" onchange="loadCourses()">
+<option value="all">All Priorities</option>
+<option value="High">High Priority</option>
+<option value="Medium">Medium Priority</option>
+<option value="Low">Low Priority</option>
+</select>
+
+<!-- NEW: Status Filter -->
+<select id="statusFilter" onchange="loadCourses()">
+<option value="all">All Status</option>
+<option value="active"><i class="bi bi-arrow-repeat"></i> Active</option>
+<option value="completed"><i class="bi bi-check-circle"></i> Completed</option>
+<option value="upcoming"><i class="bi bi-calendar"></i> Upcoming</option>
+<option value="overdue"><i class="bi bi-exclamation-triangle"></i> Overdue</option>
+</select>
+
+<!-- NEW: Sort Options -->
+<select id="sortBy" onchange="loadCourses()">
+<option value="date-desc">Latest First</option>
+<option value="date-asc">Oldest First</option>
+<option value="name-asc">Name A-Z</option>
+<option value="name-desc">Name Z-A</option>
+<option value="start-date">Start Date</option>
+<option value="end-date">End Date</option>
+<option value="progress">Progress</option>
+</select>
+
+<!-- NEW: View Mode -->
+<select id="viewMode" onchange="toggleViewMode()">
+<option value="grid"><i class="bi bi-grid-3x3-gap"></i> Grid View</option>
+<option value="list"><i class="bi bi-list-ul"></i> List View</option>
+</select>
+
+<!-- NEW: Archive Toggle -->
+<button onclick="toggleArchiveView()">
+    <span id="archiveViewText"><i class="bi bi-archive"></i> Show Archived</span>
+</button>
+
+<button onclick="clearAllFilters()"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+</div>
+
+<div class="course-grid" id="courseList"></div>
+</div>
+
+<button class="add-btn" onclick="openModal()" title="Add New Course">+</button>
+
+<!-- NEW: Secondary Action Buttons -->
+<button class="secondary-btn" id="archiveBtn" onclick="openArchiveModal()" title="View Archive"><i class="bi bi-archive"></i></button>
+<button class="secondary-btn" id="exportBtn" onclick="openExportModal()" title="Export Courses"><i class="bi bi-download"></i></button>
+
+<div id="courseModal" class="modal">
+<div class="modal-content">
+<h3 id="modalTitle">Add New Course</h3>
+<input type="text" id="courseTitle" placeholder="Course Name">
+<textarea id="courseDesc" placeholder="Description"></textarea>
+<input type="text" id="courseTags" placeholder="Tags (comma separated)">
+
+<!-- NEW: Course URL -->
+<input type="url" id="courseURL" placeholder="Course URL (optional)">
+
+<!-- NEW: Instructor -->
+<input type="text" id="courseInstructor" placeholder="Instructor Name (optional)">
+
+<!-- NEW: Category -->
+<select id="courseCategory">
+<option value="">Select Category</option>
+<option value="Programming"><i class="bi bi-code-slash"></i> Programming</option>
+<option value="Design"><i class="bi bi-palette"></i> Design</option>
+<option value="Business"><i class="bi bi-briefcase"></i> Business</option>
+<option value="Science"><i class="bi bi-microscope"></i> Science</option>
+<option value="Mathematics"><i class="bi bi-calculator"></i> Mathematics</option>
+<option value="Language"><i class="bi bi-chat-text"></i> Language</option>
+<option value="Other"><i class="bi bi-book"></i> Other</option>
+</select>
+
+<input type="date" id="courseStart" placeholder="Start Date">
+<input type="date" id="courseEnd" placeholder="End Date">
+
+<select id="coursePriority">
+<option value="Low"><i class="bi bi-dash-circle"></i> Low Priority</option>
+<option value="Medium"><i class="bi bi-exclamation-circle"></i> Medium Priority</option>
+<option value="High"><i class="bi bi-exclamation-triangle"></i> High Priority</option>
+</select>
+
+<!-- NEW: Progress Input -->
+<label>Progress: <span id="progressValue">0</span>%</label>
+<input type="range" id="courseProgress" min="0" max="100" value="0" oninput="updateProgressValue(this.value)" style="width:100%;">
+
+<!-- NEW: Course Materials -->
+<h4>Course Materials</h4>
+<div class="materials-section" id="materialsContainer">
+    <input type="text" id="materialInput" placeholder="Add material/link">
+    <button type="button" onclick="addMaterial()"><i class="bi bi-plus-circle"></i> Add Material</button>
+    <div id="materialsList"></div>
+</div>
+
+<button onclick="saveCourse()"><i class="bi bi-save"></i> Save</button>
+<button onclick="closeModal()"><i class="bi bi-x-circle"></i> Cancel</button>
+</div>
+</div>
+
+<!-- NEW: View Course Modal -->
+<div id="viewCourseModal" class="modal">
+<div class="modal-content">
+<h3 id="viewCourseTitle"></h3>
+<div id="viewCourseStatus"></div>
+<div id="viewCourseContent" style="background:#fff;padding:15px;border-radius:8px;margin:10px 0;"></div>
+<div style="margin-top:15px;">
+    <button onclick="closeViewModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- NEW: Archive Modal -->
+<div id="archiveModal" class="modal">
+<div class="modal-content">
+<h3><i class="bi bi-archive-fill"></i> Archived Courses</h3>
+<div id="archiveList" style="max-height:400px;overflow-y:auto;"></div>
+<div style="margin-top:15px;">
+    <button onclick="closeArchiveModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- NEW: Export Modal -->
+<div id="exportModal" class="modal">
+<div class="modal-content">
+<h3>Export Courses</h3>
+<button onclick="exportCourses()"><i class="bi bi-download"></i> Export as JSON</button>
+<button onclick="exportCoursesText()"><i class="bi bi-file-text"></i> Export as Text</button>
+<button onclick="exportCoursesCSV()"><i class="bi bi-file-earmark-spreadsheet"></i> Export as CSV</button>
+<h4 style="margin-top:20px;">Import Courses</h4>
+<input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
+<button onclick="importCourses()"><i class="bi bi-upload"></i> Import from JSON</button>
+<div style="margin-top:15px;">
+    <button onclick="closeExportModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- NEW: Toast Notification -->
+<div id="toast" class="toast"></div>
+
+<script src="../script/courses.js"></script>
+</body>
+</html>
+
