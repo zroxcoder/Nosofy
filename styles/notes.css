@@ -30,20 +30,20 @@
 .note-card { background:var(--soft-orange);border-radius:12px;padding:15px;box-shadow:0px 4px 10px rgba(0,0,0,0.15);position:relative;min-height:140px;animation:fadeIn 0.6s;transition:0.3s;}
 .note-card:hover { transform:translateY(-3px);box-shadow:0px 6px 15px rgba(0,0,0,0.2); }
 .note-card h3 { margin:0;padding-right:30px; }
-.note-card small { opacity:0.6; }
+.note-card small { opacity:0.7; }
 .note-card p { margin:10px 0;word-wrap:break-word; }
 
-.type-badge { display:inline-block;background:var(--primary-orange);padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;margin-bottom:8px; }
+.type-badge { display:inline-block;background:rgba(0,0,0,0.15);padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;margin-bottom:8px; }
 
 .note-card.archived { opacity:0.6;border:2px dashed #999; }
 
 .pin { position:absolute;right:12px;top:12px;font-size:20px;cursor:pointer;transition:0.2s; }
 .pin:hover { transform:scale(1.2); }
-.pin.active { color:gold; }
+.pin.active { color:#d4a000; }
 
 .note-card .actions { margin-top:10px;display:flex;gap:5px;flex-wrap:wrap; }
-.note-card .actions button { padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;background:#fff;transition:0.2s; }
-.note-card .actions button:hover { background:var(--primary-orange);transform:scale(1.05); }
+.note-card .actions button { padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;background:rgba(255,255,255,0.7);transition:0.2s; }
+.note-card .actions button:hover { background:rgba(255,255,255,0.9);transform:scale(1.05); }
 
 .add-btn { position:fixed;right:40px;bottom:40px;background:var(--primary-orange);color:#fff;font-size:30px;width:65px;height:65px;border-radius:50%;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.3);cursor:pointer;transition:0.3s;}
 .add-btn:hover { transform:scale(1.1);box-shadow:0 6px 18px rgba(0,0,0,0.4); }
@@ -54,11 +54,36 @@
 #exportBtn { bottom:190px; }
 
 .modal { position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:none;justify-content:center;align-items:center;z-index:1000;}
-.modal-content { background:var(--soft-orange);padding:25px;width:480px;max-width:92vw;max-height:85vh;overflow-y:auto;box-sizing:border-box;border-radius:12px;box-shadow:0 4px 10px black;}
-.modal-content input,.modal-content textarea,.modal-content select { width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #aaa;box-sizing:border-box;font-size:14px;}
+.modal-content { background:var(--soft-orange);padding:25px;width:520px;max-width:92vw;max-height:85vh;overflow-y:auto;box-sizing:border-box;border-radius:12px;box-shadow:0 4px 10px black;transition: background-color 0.3s;}
+.modal-content input,.modal-content textarea,.modal-content select { width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #aaa;box-sizing:border-box;font-size:14px;background:rgba(255,255,255,0.8);}
 .modal-content textarea { min-height:120px; resize:vertical; }
 .modal-content button { background:var(--primary-orange);border:none;padding:10px 20px;border-radius:8px;cursor:pointer;margin-right:8px;margin-top:5px;}
 .modal-content button:hover { opacity:0.9; }
+
+/* Color Picker Styles */
+.color-picker-section { margin:15px 0; }
+.color-picker-section label { font-weight:600;display:block;margin-bottom:10px; }
+.color-palette { display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:rgba(255,255,255,0.5);border-radius:10px; }
+.color-option { width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:0.2s;position:relative; }
+.color-option:hover { transform:scale(1.15);box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+.color-option.selected { border-color:#333;transform:scale(1.1); }
+.color-option.selected::after { content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;font-weight:bold; }
+.color-option.light-text.selected::after { color:#fff; }
+
+/* Note Colors */
+.note-default { background:#ffe0c2; }
+.note-coral { background:#f28b82; }
+.note-peach { background:#fbbc04; }
+.note-sand { background:#fff475; }
+.note-mint { background:#ccff90; }
+.note-sage { background:#a7ffeb; }
+.note-fog { background:#cbf0f8; }
+.note-storm { background:#aecbfa; }
+.note-dusk { background:#d7aefb; }
+.note-blossom { background:#fdcfe8; }
+.note-clay { background:#e6c9a8; }
+.note-chalk { background:#e8eaed; }
+.note-white { background:#ffffff; }
 
 .import-export-area { background:#fff;padding:15px;border-radius:8px;margin:10px 0;max-height:300px;overflow-y:auto;font-family:monospace;font-size:12px;white-space:pre-wrap;word-wrap:break-word; }
 
@@ -71,5 +96,21 @@
 .filter-tag { background:#fff;padding:6px 14px;border-radius:20px;border:2px solid var(--primary-orange);cursor:pointer;font-size:13px;transition:0.2s; }
 .filter-tag:hover,.filter-tag.active { background:var(--primary-orange);color:#fff; }
 
+/* Color filter tags */
+.color-filters { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;align-items:center; }
+.color-filters span { font-weight:600;font-size:14px; }
+.color-filter-dot { width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:0.2s; }
+.color-filter-dot:hover { transform:scale(1.2); }
+.color-filter-dot.active { border-color:#333;box-shadow:0 2px 6px rgba(0,0,0,0.3); }
+
 .empty-state { text-align:center;padding:60px 20px;color:#999; }
 .empty-state h3 { font-size:24px;margin-bottom:10px; }
+
+/* Quick color change on cards */
+.color-change-btn { position:absolute;right:40px;top:12px;font-size:16px;cursor:pointer;opacity:0.6;transition:0.2s; }
+.color-change-btn:hover { opacity:1;transform:scale(1.2); }
+
+.mini-color-palette { position:absolute;top:40px;right:10px;background:#fff;padding:8px;border-radius:8px;box-shadow:0 3px 12px rgba(0,0,0,0.25);display:none;flex-wrap:wrap;width:140px;gap:5px;z-index:100; }
+.mini-color-palette.show { display:flex; }
+.mini-color-option { width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:0.2s; }
+.mini-color-option:hover { transform:scale(1.2);border-color:#333; }
