@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Projects | Edumate</title>
+
+<link rel="icon" href="../assets/N.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="../styles/projects.css">
+</head>
+<body>
+
+<div id="sidebar">
+        <h3>NOSOFY</h3>
+        <a class="nav-link" href="dashboard.html">🏠 Dashboard</a>
+        <a class="nav-link" href="notes.html">📝 Notes</a>
+        <a class="nav-link" href="planner.html">📅 Planner</a>
+        <a class="nav-link active" href="projects.html">🗂️ Projects</a>
+        <a class="nav-link" href="courses.html">📒 Courses</a>
+        <a class="nav-link" href="expenses.html">💰 Expenses</a>
+        <a class="nav-link" href="passwords.html">🔐 Vault</a>
+        <a class="nav-link" href="cloudhub.html">☁️ Cloud Hub</a>
+        <a class="nav-link" href="chatbot.html">👾 Chat Bot</a>
+        <a class="nav-link" href="profile.html">⚙️ Profile</a>
+</div>
+
+<div class="content">
+<h2 class="section-title">Your Projects</h2>
+
+<!-- Statistics Bar -->
+<div class="stats-bar">
+<div class="stat-box"><i class="bi bi-folder-fill"></i> Total: <span id="totalCount">0</span></div>
+<div class="stat-box"><i class="bi bi-hourglass-split"></i> In Progress: <span id="inProgressCount">0</span></div>
+<div class="stat-box"><i class="bi bi-check-circle-fill"></i> Completed: <span id="completedCount">0</span></div>
+<div class="stat-box"><i class="bi bi-pin-angle-fill"></i> Pinned: <span id="pinnedCount">0</span></div>
+<div class="stat-box"><i class="bi bi-heart-fill"></i> Favorites: <span id="favCount">0</span></div>
+<div class="stat-box"><i class="bi bi-archive-fill"></i> Archived: <span id="archivedCount">0</span></div>
+</div>
+
+<div class="top-controls">
+<input type="text" id="searchInput" onkeyup="loadProjects()" placeholder="🔍 Search projects...">
+
+<select id="priorityFilter" onchange="loadProjects()">
+<option value="all">All Priorities</option>
+<option value="High">High Priority</option>
+<option value="Medium">Medium Priority</option>
+<option value="Low">Low Priority</option>
+</select>
+
+<select id="statusFilter" onchange="loadProjects()">
+<option value="all">All Status</option>
+<option value="Not Started">Not Started</option>
+<option value="In Progress">In Progress</option>
+<option value="Completed">Completed</option>
+<option value="On Hold">On Hold</option>
+</select>
+
+<select id="categoryFilter" onchange="loadProjects()">
+<option value="all">All Categories</option>
+<option value="Academic">Academic</option>
+<option value="Personal">Personal</option>
+<option value="Work">Work</option>
+<option value="Research">Research</option>
+<option value="Other">Other</option>
+</select>
+
+<select id="favFilter" onchange="loadProjects()">
+<option value="all">All Projects</option>
+<option value="fav">Favorites Only</option>
+</select>
+
+<select id="sortBy" onchange="loadProjects()">
+<option value="newest">Newest First</option>
+<option value="oldest">Oldest First</option>
+<option value="deadline">By Deadline</option>
+<option value="priority">By Priority</option>
+<option value="name">By Name</option>
+<option value="progress">By Progress</option>
+</select>
+
+<select id="viewMode" onchange="toggleViewMode()">
+<option value="grid"><i class="bi bi-grid-3x3-gap"></i> Grid View</option>
+<option value="list"><i class="bi bi-list-ul"></i> List View</option>
+</select>
+
+<button onclick="toggleArchiveView()">
+<span id="archiveViewText"><i class="bi bi-archive"></i> Show Archived</span>
+</button>
+
+<button onclick="clearAllFilters()"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+</div>
+
+<div class="project-grid" id="projectList"></div>
+</div>
+
+<button class="add-btn" onclick="openModal()" title="Add New Project">+</button>
+
+<!-- Secondary Buttons -->
+<button class="secondary-btn" id="archiveBtn" onclick="openArchiveModal()" title="View Archive"><i class="bi bi-archive"></i></button>
+<button class="secondary-btn" id="exportBtn" onclick="openExportModal()" title="Export Projects"><i class="bi bi-download"></i></button>
+
+<!-- Add/Edit Project Modal -->
+<div id="projectModal" class="modal">
+<div class="modal-content">
+<h3 id="modalTitle"><i class="bi bi-plus-circle"></i> Add New Project</h3>
+<input type="text" id="projectTitle" placeholder="Project Title">
+<textarea id="projectDesc" placeholder="Description"></textarea>
+<input type="text" id="projectTags" placeholder="Tags (comma separated)">
+
+<select id="projectCategory">
+<option value="">Select Category</option>
+<option value="Academic"><i class="bi bi-book"></i> Academic</option>
+<option value="Personal"><i class="bi bi-person"></i> Personal</option>
+<option value="Work"><i class="bi bi-briefcase"></i> Work</option>
+<option value="Research"><i class="bi bi-search"></i> Research</option>
+<option value="Other"><i class="bi bi-three-dots"></i> Other</option>
+</select>
+
+<input type="date" id="projectStart">
+<input type="date" id="projectDeadline">
+
+<select id="projectPriority">
+<option value="Low">🌿 Low Priority</option>
+<option value="Medium">⚡ Medium Priority</option>
+<option value="High">🔥 High Priority</option>
+</select>
+
+<select id="projectStatus">
+<option value="Not Started">Not Started</option>
+<option value="In Progress">In Progress</option>
+<option value="Completed">Completed</option>
+<option value="On Hold">On Hold</option>
+</select>
+
+<textarea id="projectSubtasks" placeholder="Subtasks (one per line)"></textarea>
+
+<label style="display:block;margin:10px 0;">
+<input type="checkbox" id="projectReminder"> Set Reminder
+</label>
+
+<button onclick="saveProject()"><i class="bi bi-save"></i> Save</button>
+<button onclick="closeModal()"><i class="bi bi-x-circle"></i> Cancel</button>
+</div>
+</div>
+
+<!-- View Project Modal -->
+<div id="viewProjectModal" class="modal">
+<div class="modal-content">
+<h3 id="viewProjectTitle"></h3>
+<div id="viewProjectStatus"></div>
+<div id="viewProjectContent" style="background:#fff;padding:15px;border-radius:8px;margin:10px 0;min-height:100px;"></div>
+<div style="margin-top:15px;">
+<button onclick="closeViewModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- Archive Modal -->
+<div id="archiveModal" class="modal">
+<div class="modal-content">
+<h3><i class="bi bi-archive-fill"></i> Archived Projects</h3>
+<div id="archiveList" style="max-height:400px;overflow-y:auto;"></div>
+<div style="margin-top:15px;">
+<button onclick="closeArchiveModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- Export Modal -->
+<div id="exportModal" class="modal">
+<div class="modal-content">
+<h3>Export / Import Projects</h3>
+<h4>Export Projects</h4>
+<button onclick="exportProjects()"><i class="bi bi-download"></i> Export as JSON</button>
+<button onclick="exportProjectsText()"><i class="bi bi-file-text"></i> Export as Text</button>
+<button onclick="exportProjectsCSV()"><i class="bi bi-file-earmark-spreadsheet"></i> Export as CSV</button>
+
+<h4 style="margin-top:20px;">Import Projects</h4>
+<input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
+<button onclick="importProjects()"><i class="bi bi-upload"></i> Import from JSON</button>
+
+<h4 style="margin-top:20px;">Preview</h4>
+<div class="import-export-area" id="exportPreview">Export data will appear here...</div>
+
+<div style="margin-top:15px;">
+<button onclick="closeExportModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
+<script src="../script/projects.js"></script>
+</body>
+</html>
