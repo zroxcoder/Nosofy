@@ -17,7 +17,7 @@ const achievements = [
 
 function openDB() {
     return new Promise((resolve, reject) => {
-        const req = indexedDB.open("MateDB", 3);
+       const req = indexedDB.open("Nosofy", 8);
         req.onupgradeneeded = e => {
             db = e.target.result;
             ["notes", "tasks", "projects", "courses", "profile", "activity", "certificates", "chats", "searches", "watchlist", "expenses", "settings", "passwords", "cloudhub", "timersessions", "productivity"].forEach(store => {
