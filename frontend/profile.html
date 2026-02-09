@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Profile | Nosofy</title>
+
+<link rel="icon" href="../assets/E.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="../styles/profile.css">
+
+</head>
+<body>
+
+<div id="sidebar">
+    <h3>NOSOFY</h3>
+    <a class="nav-link" href="dashboard.html">📊 Dashboard</a>
+    <a class="nav-link" href="notes.html">📝 Notes</a>
+    <a class="nav-link" href="planner.html">📅 Planner</a>
+    <a class="nav-link" href="projects.html">📁 Projects</a>
+    <a class="nav-link" href="courses.html">🎓 Courses</a>
+    <a class="nav-link" href="expenses.html">💰 Expenses</a>
+    <a class="nav-link" href="passwords.html">🔐 Passwords</a>
+    <a class="nav-link" href="cloudhub.html">☁️ Cloud Hub</a>
+    <a class="nav-link" href="aichatbot.html">🤖 Chat Bot</a>
+    <a class="nav-link active" href="profile.html">⚙️ Profile</a>
+</div>
+
+<div class="content">
+    <h2 class="section-title"><i class="bi bi-person-circle"></i> Profile & Settings</h2>
+
+    <!-- Statistics Bar -->
+    <div class="stats-bar">
+        <div class="stat-box">
+            <i class="bi bi-clipboard-check"></i>
+            <span id="totalCompleted">0</span>
+            <p>Total Completed</p>
+        </div>
+        <div class="stat-box">
+            <i class="bi bi-lightning-charge"></i>
+            <span id="currentStreak">0</span>
+            <p>Day Streak</p>
+        </div>
+        <div class="stat-box">
+            <i class="bi bi-award"></i>
+            <span id="totalAchievements">0</span>
+            <p>Achievements</p>
+        </div>
+        <div class="stat-box">
+            <i class="bi bi-calendar-check"></i>
+            <span id="accountAge">0</span>
+            <p>Days Active</p>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('profile')"><i class="bi bi-person"></i> Profile</button>
+        <button class="tab" onclick="switchTab('certificates')"><i class="bi bi-award"></i> Certificates</button>
+        <button class="tab" onclick="switchTab('activity')"><i class="bi bi-clock-history"></i> Activity</button>
+        <button class="tab" onclick="switchTab('progress')"><i class="bi bi-graph-up"></i> Progress</button>
+        <button class="tab" onclick="switchTab('achievements')"><i class="bi bi-trophy"></i> Achievements</button>
+        <button class="tab" onclick="switchTab('data')"><i class="bi bi-database"></i> Data</button>
+        <button class="tab" onclick="switchTab('settings')"><i class="bi bi-gear"></i> Settings</button>
+    </div>
+
+    <!-- Profile Tab -->
+    <div id="profile-tab" class="tab-content active">
+        <div class="profile-card">
+            <div class="profile-pic-container">
+                <img id="profilePic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23ffe0c2' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48' fill='%23ffb56b'%3E👤%3C/text%3E%3C/svg%3E" alt="Profile Picture">
+                <label class="pic-upload-btn">
+                    <i class="bi bi-camera"></i>
+                    <input type="file" id="uploadPic" accept="image/*" onchange="uploadProfilePic(event)" style="display:none;">
+                </label>
+            </div>
+            <div class="profile-details">
+                <h3 id="username">Your Name</h3>
+                <p id="status"><i class="bi bi-chat-quote"></i> Your Status</p>
+                <p id="email"><i class="bi bi-envelope"></i> <span id="emailText">Not set</span></p>
+                <p id="joinDate"><i class="bi bi-calendar"></i> Member since: <span id="joinDateText">Today</span></p>
+                <button onclick="openEditProfileModal()"><i class="bi bi-pencil"></i> Edit Profile</button>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <label><i class="bi bi-person"></i> Full Name</label>
+                <input type="text" id="fullName" placeholder="Enter full name" readonly>
+            </div>
+            <div class="info-card">
+                <label><i class="bi bi-envelope"></i> Email</label>
+                <input type="email" id="emailInput" placeholder="Enter email" readonly>
+            </div>
+            <div class="info-card">
+                <label><i class="bi bi-telephone"></i> Phone</label>
+                <input type="tel" id="phone" placeholder="Enter phone" readonly>
+            </div>
+            <div class="info-card">
+                <label><i class="bi bi-geo-alt"></i> Location</label>
+                <input type="text" id="location" placeholder="Enter location" readonly>
+            </div>
+            <div class="info-card">
+                <label><i class="bi bi-briefcase"></i> Occupation</label>
+                <input type="text" id="occupation" placeholder="Enter occupation" readonly>
+            </div>
+            <div class="info-card">
+                <label><i class="bi bi-calendar-event"></i> Birthday</label>
+                <input type="date" id="birthday" readonly>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificates Tab -->
+    <div id="certificates-tab" class="tab-content">
+        <div style="margin-bottom:15px;">
+            <label class="file-input-label">
+                <i class="bi bi-upload"></i> Upload Certificate(s)
+                <input type="file" id="uploadCert" accept="image/*,.pdf" multiple onchange="uploadCertificates(event)">
+            </label>
+        </div>
+        <div class="certificates-grid" id="certificatesGrid"></div>
+    </div>
+
+    <!-- Activity Tab -->
+    <div id="activity-tab" class="tab-content">
+        <div class="activity-controls">
+            <input type="text" id="activitySearch" onkeyup="loadActivity()" placeholder="🔍 Search activity...">
+            <select id="activityFilter" onchange="loadActivity()">
+                <option value="all">All Activities</option>
+                <option value="profile">Profile Updates</option>
+                <option value="certificate">Certificates</option>
+                <option value="task">Tasks</option>
+                <option value="project">Projects</option>
+                <option value="course">Courses</option>
+                <option value="note">Notes</option>
+            </select>
+            <button onclick="exportActivity()"><i class="bi bi-download"></i> Export</button>
+            <button onclick="clearActivity()"><i class="bi bi-trash"></i> Clear All</button>
+        </div>
+        <div class="activity-grid" id="activityGrid"></div>
+    </div>
+
+    <!-- Progress Tab -->
+    <div id="progress-tab" class="tab-content">
+        <div style="text-align:center;margin-bottom:20px;">
+            <h3>Your Completion Progress</h3>
+            <p>Track your overall productivity across all sections</p>
+        </div>
+        <div id="progressChartWrap" style="display:flex;justify-content:center;">
+            <canvas id="progressChart" style="width:100%;max-width:600px;height:300px;"></canvas>
+        </div>
+        <div id="progressError" style="color:#b00020;margin-top:6px;text-align:center;display:none;"></div>
+        
+        <div class="info-grid" style="margin-top:30px;">
+            <div class="info-card">
+                <label><i class="bi bi-folder-check"></i> Projects Progress</label>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="projectProgress">0%</div>
+                </div>
+            </div>
+            <div class="info-card">
+                <label><i class="bi bi-list-check"></i> Tasks Progress</label>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="taskProgress">0%</div>
+                </div>
+            </div>
+            <div class="info-card">
+                <label><i class="bi bi-book"></i> Courses Progress</label>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="courseProgress">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Tab -->
+    <div id="achievements-tab" class="tab-content">
+        <h3>Your Achievements</h3>
+        <p>Unlock achievements by completing tasks and reaching milestones!</p>
+        <div class="achievement-grid" id="achievementGrid"></div>
+    </div>
+
+    <!-- Data Tab -->
+    <div id="data-tab" class="tab-content">
+        <div style="background:var(--soft-orange);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <h4><i class="bi bi-download"></i> Export Data</h4>
+            <p>Download all your data in different formats</p>
+            <div class="data-controls">
+                <button onclick="exportData()"><i class="bi bi-filetype-json"></i> Export as JSON</button>
+                <button onclick="exportDataCSV()"><i class="bi bi-filetype-csv"></i> Export as CSV</button>
+                <button onclick="exportDataText()"><i class="bi bi-file-text"></i> Export as Text</button>
+            </div>
+        </div>
+
+        <div style="background:var(--soft-orange);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <h4><i class="bi bi-upload"></i> Import Data</h4>
+            <p>Restore your data from a backup file</p>
+            <div class="data-controls">
+                <label class="file-input-label">
+                    <i class="bi bi-upload"></i> Choose File
+                    <input type="file" accept=".json" onchange="importData(event)">
+                </label>
+            </div>
+        </div>
+
+        <div style="background:var(--soft-orange);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <h4><i class="bi bi-database"></i> Database Statistics</h4>
+            <div class="info-grid">
+                <div class="info-card">
+                    <label><i class="bi bi-sticky"></i> Total Notes</label>
+                    <h3 id="statNotes">0</h3>
+                </div>
+                <div class="info-card">
+                    <label><i class="bi bi-list-task"></i> Total Tasks</label>
+                    <h3 id="statTasks">0</h3>
+                </div>
+                <div class="info-card">
+                    <label><i class="bi bi-folder"></i> Total Projects</label>
+                    <h3 id="statProjects">0</h3>
+                </div>
+                <div class="info-card">
+                    <label><i class="bi bi-book"></i> Total Courses</label>
+                    <h3 id="statCourses">0</h3>
+                </div>
+                <div class="info-card">
+                  <label><i class="bi bi-wallet2"></i> Total Expenses</label>
+                <h3 id="statExpenses">0</h3>
+                </div>
+                <div class="info-card">
+                 <label><i class="bi bi-camera-reels"></i> Total Watchlist</label>
+                 <h3 id="statWatchlist">0</h3>
+                </div>
+                <div class="info-card">
+                <label><i class="bi bi-key-fill"></i> Total Passwords</label>
+                <h3 id="statPasswords">0</h3>
+                 </div>
+                  <div class="info-card">
+                <label><i class="bi bi-cloud"></i> Total Cloud Items</label>
+               <h3 id="statCloudHub">0</h3>
+            </div>
+            </div>
+        </div>
+
+        <div style="background:var(--soft-orange);padding:20px;border-radius:12px;border:2px solid #f44336;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <h4><i class="bi bi-exclamation-triangle"></i> Danger Zone</h4>
+            <p style="color:#f44336;">Warning: These actions cannot be undone!</p>
+            <div class="data-controls">
+                <button onclick="clearActivity()" style="background:#ff9800;"><i class="bi bi-clock-history"></i> Clear Activity Log</button>
+                <button onclick="clearAllData()" style="background:#f44336;"><i class="bi bi-trash"></i> Delete All Data</button>
+            </div>
+        </div>
+    </div>
+   <!-- Settings Tab -->
+   <div id="settings-tab" class="tab-content">
+    <div style="background:var(--soft-orange);padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+        <h4><i class="bi bi-info-circle"></i> Information & Support</h4>
+        <p>Click on any card to visit the page</p>
+        <div class="info-grid">
+            <a href="about.html" style="text-decoration:none;">
+                <div class="info-card" style="cursor:pointer;transition:0.3s;">
+                    <label style="cursor:pointer;"><i class="bi bi-info-square"></i> About Edumate</label>
+                    <p style="color:#666;font-size:12px;margin-top:8px;">Learn more about Edumate and our mission</p>
+                </div>
+            </a>
+            
+            <a href="help.html" style="text-decoration:none;">
+                <div class="info-card" style="cursor:pointer;transition:0.3s;">
+                    <label style="cursor:pointer;"><i class="bi bi-question-circle"></i> Help Center</label>
+                    <p style="color:#666;font-size:12px;margin-top:8px;">Get help with using Edumate features</p>
+                </div>
+            </a>
+            
+            <a href="faq.html" style="text-decoration:none;">
+                <div class="info-card" style="cursor:pointer;transition:0.3s;">
+                    <label style="cursor:pointer;"><i class="bi bi-chat-left-dots"></i> FAQ</label>
+                    <p style="color:#666;font-size:12px;margin-top:8px;">Frequently asked questions and answers</p>
+                </div>
+            </a>
+            
+            <a href="contact.html" style="text-decoration:none;">
+                <div class="info-card" style="cursor:pointer;transition:0.3s;">
+                    <label style="cursor:pointer;"><i class="bi bi-envelope"></i> Contact Us</label>
+                    <p style="color:#666;font-size:12px;margin-top:8px;">Get in touch with our support team</p>
+                </div>
+            </a>
+            
+            <a href="report.html" style="text-decoration:none;">
+                <div class="info-card" style="cursor:pointer;transition:0.3s;">
+                    <label style="cursor:pointer;"><i class="bi bi-flag"></i> Report Issue</label>
+                    <p style="color:#666;font-size:12px;margin-top:8px;">Report bugs or issues you've encountered</p>
+                </div>
+            </a>
+
+            <a href="docs.html" style="text-decoration: none;">
+                <div class="info-card" style="cursor: pointer;transition:0.3s;">
+                    <label style="cursor:pointer;"><i class="bi bi-file-earmark"></i> Docs</label>
+                    <p style="color: #666;font-size:12px;margin-top:8px;">Document of Keikinote</p>
+                </div>
+            </a>
+
+            <a href="privacy.html" style="text-decoration: none;">
+                <div class="info-card" style="cursor: pointer;transition: 0.3s;">
+                    <label style="cursor: pointer;"><i class="bi bi-shield-lock-fill">privacy&policy</i></label>
+                    <p style="color: #666;"font-size:12px;margin-top:8px;>privacy&Policy</p>
+                </div>
+            </a>
+            
+            <a href="academy.html" style="text-decoration: none;">
+                <div class="info-card" style="cursor: pointer;transition: 0.3s;">
+                    <label style="cursor: pointer;"><i class="bi bi-backpack-fill"></i></label>
+                    <p style="color: #666;"font-size:12px;margin-top:8px;>EduMate Academy</p>
+                </div>
+            </a>
+            
+            <a href="blog.html" style="text-decoration:none;">
+                <div class="info-card" style="cursor:pointer;transition:0.3s;">
+                    <label style="cursor:pointer;"><i class="bi bi-newspaper"></i> Blog</label>
+                    <p style="color:#666;font-size:12px;margin-top:8px;">Read our latest updates and articles</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div id="editProfileModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="bi bi-pencil-square"></i> Edit Profile</h3>
+        <label>Username</label>
+        <input type="text" id="editUsername" placeholder="Username">
+        <label>Status/Bio</label>
+        <textarea id="editStatus" placeholder="Your status or bio"></textarea>
+        <label>Full Name</label>
+        <input type="text" id="editFullName" placeholder="Full Name">
+        <label>Email</label>
+        <input type="email" id="editEmail" placeholder="Email">
+        <label>Phone</label>
+        <input type="tel" id="editPhone" placeholder="Phone">
+        <label>Location</label>
+        <input type="text" id="editLocation" placeholder="Location">
+        <label>Occupation</label>
+        <input type="text" id="editOccupation" placeholder="Occupation">
+        <label>Birthday</label>
+        <input type="date" id="editBirthday">
+        <button onclick="saveProfile()"><i class="bi bi-save"></i> Save</button>
+        <button onclick="closeEditProfileModal()"><i class="bi bi-x-circle"></i> Cancel</button>
+    </div>
+</div>
+
+<!-- View Certificate Modal -->
+<div id="viewCertModal" class="modal">
+    <div class="modal-content" style="max-width:90vw;width:700px;">
+        <h3 id="certModalTitle">Certificate</h3>
+        <div id="certModalContent" style="text-align:center;"></div>
+        <button onclick="closeViewCertModal()">Close</button>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+
+<script src="../script/profile.js"></script>
+</body>
+</html>
