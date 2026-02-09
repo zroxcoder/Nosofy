@@ -1,0 +1,221 @@
+:root {
+    --primary-orange: #ffb56b;
+    --soft-orange: #ffe0c2;
+    --dark-text: #333;
+    --light-bg: #ffffff;
+}
+
+/* RESET (keep minimal so font matches Code 1 look) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* FONT – match Code 1 (no Segoe UI override) */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--dark-text);
+}
+
+/* ===================== */
+/* SIDEBAR (FROM CODE 1) */
+/* ===================== */
+
+#sidebar {
+    width:260px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    background:var(--soft-orange);
+    padding-top:20px;
+    overflow-y:auto;
+    box-shadow:5px 0 12px rgba(0,0,0,0.1);
+    z-index:100;
+}
+
+#sidebar h3 {
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.2);
+    margin-left:20px;
+    animation:fadeIn 1s ease-in-out;
+}
+
+#sidebar .nav-link {
+    display:block;
+    color:var(--dark-text);
+    font-weight:600;
+    margin:6px 10px;
+    padding:10px 15px;
+    border-radius:10px;
+    text-decoration:none;
+    transition:0.25s ease-in-out;
+}
+
+#sidebar .nav-link:hover,
+#sidebar .nav-link.active {
+    background:var(--primary-orange);
+    color:#000;
+    transform:translateX(5px);
+}
+
+/* ===================== */
+/* MAIN CONTENT (CODE 2) */
+/* ===================== */
+
+.content {
+    margin-left:260px;
+    padding:30px;
+    min-height:100vh;
+    background: var(--light-bg);
+}
+
+.section-title {
+    font-size:26px;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+/* ===================== */
+/* CHAT UI (UNCHANGED)   */
+/* ===================== */
+
+#chatBox {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 15px;
+    background: var(--soft-orange);
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 80%;
+    word-wrap: break-word;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.user {
+    background: var(--primary-orange);
+    color: #000;
+    align-self: flex-end;
+}
+
+.ai {
+    background: #fff;
+    color: #333;
+    align-self: flex-start;
+    border:1px solid #ccc;
+}
+
+/* INPUT AREA */
+
+#inputArea {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+#chatInput {
+    flex-grow:1;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    min-width:200px;
+}
+
+#sendBtn {
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    background:var(--primary-orange);
+    color:#000;
+    cursor:pointer;
+    font-weight:600;
+}
+
+#sendBtn:hover { opacity:0.9; }
+#sendBtn:disabled { opacity:0.5; cursor:not-allowed; }
+
+/* ACTION BUTTONS */
+
+.action-btn {
+    border-radius:8px;
+    padding:8px 10px;
+    border:1px solid #ccc;
+    background:#fff;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s;
+}
+
+.action-btn:hover { background:#f5f5f5; }
+
+/* HELP PANEL */
+
+#helpPanel { 
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    background:#fff;
+    border-radius:8px;
+    border:1px solid #e6e6e6;
+    max-width:720px;
+    font-size:14px;
+    line-height:1.6;
+}
+
+#helpPanel ul { margin:6px 0 0 18px; }
+#helpPanel code {
+    background:#f5f5f5;
+    padding:2px 6px;
+    border-radius:4px;
+}
+
+/* SEARCH HISTORY */
+
+#searchHistory { 
+    display:none;
+    margin-top:12px;
+    max-height:200px;
+    overflow:auto;
+    padding:10px;
+    background:#fff;
+    border-radius:8px;
+    border:1px solid #e6e6e6;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn {
+    from { opacity:0; transform:translateY(10px); }
+    to { opacity:1; transform:translateY(0); }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    #chatBox {
+        max-height: 400px;
+    }
+}

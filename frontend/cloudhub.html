@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cloud Hub | NOSOFY</title>
+
+<link rel="icon" href="../assets/E.ico" type="image/x-icon">
+<link rel="stylesheet" href="../styles/cloudhub.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+<body>
+
+<div id="sidebar">
+    <h3>NOSOFY</h3>
+    <a class="nav-link" href="dashboard.html">📊 Dashboard</a>
+    <a class="nav-link" href="notes.html">📝 Notes</a>
+    <a class="nav-link" href="planner.html">📅 Planner</a>
+    <a class="nav-link" href="projects.html">📁 Projects</a>
+    <a class="nav-link" href="courses.html">🎓 Courses</a>
+    <a class="nav-link" href="expenses.html">💰 Expenses</a>
+    <a class="nav-link" href="passwords.html">🔐 Passwords</a>
+    <a class="nav-link active" href="cloudhub.html">☁️ Cloud Hub</a>
+    <a class="nav-link" href="aichatbot.html">🤖 Chat Bot</a>
+    <a class="nav-link" href="profile.html">⚙️ Profile</a>
+</div>
+
+<div class="content">
+    <h2 class="section-title">☁️ Cloud Hub - Manage Your Cloud Services</h2>
+    
+    <div class="stats-bar">
+        <div class="stat-box"><i class="bi bi-cloud"></i> Total Items: <span id="totalCount">0</span></div>
+        <div class="stat-box"><i class="bi bi-google"></i> Google Drive: <span id="gdriveCount">0</span></div>
+        <div class="stat-box"><i class="bi bi-envelope"></i> Gmail: <span id="gmailCount">0</span></div>
+        <div class="stat-box"><i class="bi bi-star-fill"></i> Favorites: <span id="favoriteCount">0</span></div>
+    </div>
+    
+    <div class="toolbar">
+        <input type="text" id="searchBox" placeholder="🔍 Search by title, description, or tags..." oninput="loadCloudItems()">
+        
+        <select id="filterService" onchange="loadCloudItems()">
+            <option value="all">All Services</option>
+            <option value="gdrive">📁 Google Drive</option>
+            <option value="gmail">📧 Gmail</option>
+            <option value="onedrive">☁️ OneDrive</option>
+            <option value="dropbox">📦 Dropbox</option>
+            <option value="other">🔗 Other</option>
+        </select>
+        
+        <select id="sortBy" onchange="loadCloudItems()">
+            <option value="date-desc">Latest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="title-asc">Title A-Z</option>
+            <option value="title-desc">Title Z-A</option>
+        </select>
+        
+        <select id="viewMode" onchange="toggleViewMode()">
+            <option value="grid">🔲 Grid View</option>
+            <option value="list">📋 List View</option>
+        </select>
+        
+        <button onclick="clearAllFilters()"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+    </div>
+    
+    <div class="filter-tags" id="tagFilters"></div>
+    
+    <div class="cloud-grid" id="cloudList"></div>
+</div>
+
+<button class="add-btn" onclick="openModal()" title="Add Cloud Item">+</button>
+
+<button class="secondary-btn" id="quickAccessBtn" onclick="openQuickAccessModal()" title="Quick Access"><i class="bi bi-lightning-fill"></i></button>
+<button class="secondary-btn" id="exportBtn" onclick="openImportExportModal()" title="Import/Export"><i class="bi bi-download"></i></button>
+
+<!-- Add/Edit Cloud Item Modal -->
+<div id="cloudModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Add Cloud Item</h3>
+        
+        <div class="form-group">
+            <label>Service Type *</label>
+            <select id="serviceType">
+                <option value="gdrive">📁 Google Drive</option>
+                <option value="gmail">📧 Gmail</option>
+                <option value="onedrive">☁️ OneDrive</option>
+                <option value="dropbox">📦 Dropbox</option>
+                <option value="other">🔗 Other Cloud Service</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Title *</label>
+            <input id="title" type="text" placeholder="e.g., Project Files, Important Email Thread">
+        </div>
+        
+        <div class="form-group">
+            <label>Link/URL *</label>
+            <input id="link" type="url" placeholder="https://drive.google.com/...">
+            <div class="hint">Paste the full URL to your file, folder, or email</div>
+        </div>
+        
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="description" placeholder="Add notes, context, or timeline information..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Tags</label>
+            <input id="tags" type="text" placeholder="work, important, project, etc. (comma separated)">
+        </div>
+        
+        <div class="form-group">
+            <label>Timeline/Date (optional)</label>
+            <input id="timeline" type="text" placeholder="e.g., Q1 2024, March 15, Due next week">
+            <div class="hint">Add any relevant timeline or deadline information</div>
+        </div>
+        
+        <div>
+            <button onclick="saveCloudItem()"><i class="bi bi-save"></i> Save</button>
+            <button onclick="closeModal()"><i class="bi bi-x-circle"></i> Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- View Details Modal -->
+<div id="viewModal" class="modal">
+    <div class="modal-content">
+        <h3 id="viewTitle"></h3>
+        <div class="service-badge" id="viewService"></div>
+        
+        <div class="link-preview" id="viewLinkPreview"></div>
+        
+        <div style="background:#fff;padding:15px;border-radius:8px;margin:15px 0;">
+            <h4 style="margin-top:0;">Description</h4>
+            <p id="viewDescription" style="margin:0;"></p>
+        </div>
+        
+        <div style="margin:15px 0;" id="viewTimelineContainer"></div>
+        
+        <p><strong>Tags:</strong> <span id="viewTags"></span></p>
+        <p><strong>Added:</strong> <span id="viewTime"></span></p>
+        <p><strong>Last Modified:</strong> <span id="viewModified"></span></p>
+        
+        <div style="margin-top:15px;">
+            <button onclick="openLink()"><i class="bi bi-box-arrow-up-right"></i> Open Link</button>
+            <button onclick="closeViewModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access Modal -->
+<div id="quickAccessModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="bi bi-lightning-fill"></i> Quick Access to Cloud Services</h3>
+        <p>Click to open your cloud services directly:</p>
+        
+        <div class="quick-access-grid">
+            <a href="https://drive.google.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-google" style="color:#4285f4;"></i>
+                <span>Google Drive</span>
+            </a>
+            <a href="https://mail.google.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-envelope-fill" style="color:#ea4335;"></i>
+                <span>Gmail</span>
+            </a>
+            <a href="https://onedrive.live.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-cloud-fill" style="color:#0078d4;"></i>
+                <span>OneDrive</span>
+            </a>
+            <a href="https://www.dropbox.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-droplet-fill" style="color:#0061ff;"></i>
+                <span>Dropbox</span>
+            </a>
+            <a href="https://photos.google.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-image-fill" style="color:#fbbc04;"></i>
+                <span>Google Photos</span>
+            </a>
+            <a href="https://docs.google.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-file-text-fill" style="color:#4285f4;"></i>
+                <span>Google Docs</span>
+            </a>
+            <a href="https://sheets.google.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-table" style="color:#34a853;"></i>
+                <span>Google Sheets</span>
+            </a>
+            <a href="https://slides.google.com" target="_blank" class="quick-access-item">
+                <i class="bi bi-easel-fill" style="color:#fbbc04;"></i>
+                <span>Google Slides</span>
+            </a>
+        </div>
+        
+        <h4 style="margin-top:25px;">Your Favorite Items</h4>
+        <div id="favoritesQuickList" style="max-height:200px;overflow-y:auto;"></div>
+        
+        <div style="margin-top:15px;">
+            <button onclick="closeQuickAccessModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Import/Export Modal -->
+<div id="importExportModal" class="modal">
+    <div class="modal-content">
+        <h3>Import / Export Cloud Hub Data</h3>
+        
+        <h4>Export Data</h4>
+        <button onclick="exportData()"><i class="bi bi-download"></i> Export All (JSON)</button>
+        <button onclick="exportDataText()"><i class="bi bi-file-text"></i> Export as Text</button>
+        
+        <h4 style="margin-top:20px;">Import Data</h4>
+        <input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
+        <button onclick="importData()"><i class="bi bi-upload"></i> Import from JSON</button>
+        
+        <h4 style="margin-top:20px;">Preview</h4>
+        <div class="import-export-area" id="exportPreview">Export data will appear here...</div>
+        
+        <div style="margin-top:15px;">
+            <button onclick="closeImportExportModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="../script/cloudhub.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chat Bot | NOSOFY</title>
+
+<link rel="icon" href="../assets/E.ico" type="image/x-icon">
+<link rel="stylesheet" href="../pages styles/chatbot.css">
+</head>
+<body>
+
+<div id="sidebar">
+    <h3>NOSOFY</h3>
+    <a class="nav-link" href="dashboard.html">📊 Dashboard</a>
+    <a class="nav-link" href="notes.html">📝 Notes</a>
+    <a class="nav-link" href="planner.html">📅 Planner</a>
+    <a class="nav-link" href="projects.html">📁 Projects</a>
+    <a class="nav-link" href="courses.html">🎓 Courses</a>
+    <a class="nav-link" href="expenses.html">💰 Expenses</a>
+    <a class="nav-link" href="passwords.html">🔐 Passwords</a>
+    <a class="nav-link" href="cloudhub.html">☁️ Cloud Hub</a>
+    <a class="nav-link active" href="aichatbot.html">🤖 Chat Bot</a>
+    <a class="nav-link" href="profile.html">⚙️ Profile</a>
+</div>
+
+<div class="content">
+    <h2 class="section-title">Chat Bot</h2>
+
+    <div id="chatBox" aria-live="polite"></div>
+
+    <div id="inputArea">
+        <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off" />
+        <button id="sendBtn" disabled>Send</button>
+        <button id="historyBtn" class="action-btn" title="Search history">📚 History</button>
+        <button id="helpBtn" class="action-btn" title="Show help">❓ Help</button>
+    </div>
+    
+    <div id="searchHistory">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <strong>Search History</strong>
+            <button id="clearSearchHistoryBtn" class="action-btn" style="background:var(--primary-orange);">Clear All</button>
+        </div>
+        <div id="searchHistoryList">Loading...</div>
+    </div>
+    
+    <div id="helpPanel" aria-hidden="true">
+        <div id="helpIntro" style="margin-bottom:12px;">
+            <strong style="font-size:16px;">🤖 Chat Bot — Quick Guide</strong>
+            <div style="margin-top:8px;font-size:14px;line-height:1.6;">
+                <div><strong>What I can do:</strong> Help manage tasks, find resources, provide study tips, search research papers, access past papers, answer questions, and boost your motivation!</div>
+                <div style="margin-top:6px;"><strong>How to use:</strong> Just ask naturally! I understand conversational language and can help with academics, productivity, and personal development.</div>
+            </div>
+        </div>
+        <strong>Supported past-paper subjects:</strong>
+        <ul id="helpSubjectList"></ul>
+        <div style="margin-top:10px;">
+            <strong>Example queries:</strong>
+            <ul style="margin:6px 0 0 18px;">
+                <li><code>what should I do first?</code> — Get priority suggestions</li>
+                <li><code>show my tasks</code> — List pending tasks</li>
+                <li><code>study tips for exams</code> — Get study advice</li>
+                <li><code>how to stay motivated</code> — Motivation boost</li>
+                <li><code>past paper accounting 9706 2020</code> — Access past papers</li>
+                <li><code>research climate change</code> — Search Google Scholar</li>
+                <li><code>essay writing tips</code> — Writing guidance</li>
+                <li><code>explain photosynthesis</code> — Concept explanations</li>
+                <li><code>programming help</code> — Coding resources</li>
+                <li><code>test anxiety tips</code> — Exam stress help</li>
+                <li><code>show my watchlist</code> — View watchlist items</li>
+                <li><code>random pick</code> — Get random watch suggestion</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="../script/chatbot.js"></script>
+</body>
+</html>
